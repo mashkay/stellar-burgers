@@ -1,4 +1,5 @@
-import { configureStore } from '@reduxjs/toolkit';
+import { combineSlices, configureStore } from '@reduxjs/toolkit';
+import authSlice from './slices/auth/authSlice';
 
 import {
   TypedUseSelectorHook,
@@ -6,7 +7,7 @@ import {
   useSelector as selectorHook
 } from 'react-redux';
 
-const rootReducer = () => {}; // Заменить на импорт настоящего редьюсера
+const rootReducer = combineSlices(authSlice); // Заменить на импорт настоящего редьюсера
 
 const store = configureStore({
   reducer: rootReducer,
@@ -17,7 +18,7 @@ export type RootState = ReturnType<typeof rootReducer>;
 
 export type AppDispatch = typeof store.dispatch;
 
-export const useDispatch: () => AppDispatch = () => dispatchHook();
-export const useSelector: TypedUseSelectorHook<RootState> = selectorHook;
+export const useAppDispatch: () => AppDispatch = () => dispatchHook();
+export const useAppSelector: TypedUseSelectorHook<RootState> = selectorHook;
 
 export default store;
