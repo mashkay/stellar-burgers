@@ -1,6 +1,5 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { deleteCookie, getCookie, setCookie } from '../../../utils/cookie';
-import { setAuthChecked, setError, setUser } from './authSlice';
 import {
   getUserApi,
   loginUserApi,
@@ -17,19 +16,11 @@ export const checkUserAuthThunk = createAsyncThunk(
     const accessToken = getCookie('accessToken');
     const refreshToken = localStorage.getItem('refreshToken');
     if (!accessToken && !refreshToken) {
-      dispatch(setUser(null));
-      dispatch(setError(null));
-    } else {
-      getUserApi()
-        .then((response) => {
-          dispatch(setUser(response.user));
-        })
-        .catch((error) => {
-          dispatch(setError(error.message));
-          dispatch(setUser(null));
-        });
+      return null;
     }
-    dispatch(setAuthChecked(true));
+
+    const response = await getUserApi();
+    return response.user;
   }
 );
 
@@ -51,17 +42,12 @@ export const registerThunk = createAsyncThunk(
   }
 );
 
-export const logoutThunk = createAsyncThunk(
-  'auth/logout',
-  async (_, { dispatch }) => {
-    const response = await logoutApi();
-    if (response.success) {
-      clearCookies();
-      dispatch(setUser(null));
-      dispatch(setError(null));
-    }
+export const logoutThunk = createAsyncThunk('auth/logout', async () => {
+  const response = await logoutApi();
+  if (response.success) {
+    clearCookies();
   }
-);
+});
 
 export const updateUserThunk = createAsyncThunk(
   'auth/updateUser',
