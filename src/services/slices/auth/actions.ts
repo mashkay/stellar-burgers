@@ -24,7 +24,7 @@ export const checkUserAuthThunk = createAsyncThunk(
           dispatch(setUser(response.user));
         })
         .catch((error) => {
-          dispatch(setError(error));
+          dispatch(setError(error.message));
           dispatch(setUser(null));
         });
     }

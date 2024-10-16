@@ -8,13 +8,13 @@ export interface AuthState {
   error: string | null;
 }
 
-export const initialState: AuthState = {
+const initialState: AuthState = {
   isAuthChecked: false,
   user: null,
   error: null
 };
 
-export const authSlice = createSlice({
+const authSlice = createSlice({
   name: 'auth',
   initialState,
   reducers: {
@@ -28,7 +28,11 @@ export const authSlice = createSlice({
       state.error = action.payload;
     }
   },
-  selectors: {},
+  selectors: {
+    selectIsAuthChecked: (state: AuthState) => state.isAuthChecked,
+    selectUser: (state: AuthState) => state.user,
+    selectError: (state: AuthState) => state.error
+  },
   extraReducers: (builder) => {
     builder
       // Login
@@ -63,5 +67,6 @@ export const authSlice = createSlice({
 });
 
 export const { setAuthChecked, setUser, setError } = authSlice.actions;
-export const {} = authSlice.selectors;
+export const { selectError, selectIsAuthChecked, selectUser } =
+  authSlice.selectors;
 export default authSlice;
