@@ -7,7 +7,7 @@ export const Login: FC = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const dispatch = useAppDispatch();
-  const error = useAppSelector(auth.selectError);
+  const error = useAppSelector(auth.selectLoginError);
 
   const handleSubmit = (e: SyntheticEvent) => {
     e.preventDefault();
