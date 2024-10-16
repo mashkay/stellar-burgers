@@ -14,8 +14,8 @@ import styles from './app.module.css';
 
 import { AppHeader, IngredientDetails, Modal, OrderInfo } from '@components';
 import { useEffect } from 'react';
-import { useAppDispatch } from '@store';
-import { auth } from '@slices';
+import { useAppDispatch, useAppSelector } from '@store';
+import { auth, ingredients } from '@slices';
 import { Route, Routes, useLocation, useNavigate } from 'react-router-dom';
 import { OnlyAuth, OnlyUnAuth } from '../protected-route';
 
@@ -27,6 +27,9 @@ const App = () => {
     dispatch(auth.checkUserAuthThunk());
   }, []);
 
+  useEffect(() => {
+    dispatch(ingredients.fetchIngredientsThunk());
+  }, []);
   const onModalClose = () => {
     navigate(-1);
   };
