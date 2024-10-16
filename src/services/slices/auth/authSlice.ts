@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { TUser } from '@utils-types';
-import { loginThunk, registerThunk } from './actions';
+import { loginThunk, registerThunk, updateUserThunk } from './actions';
 
 export interface AuthState {
   isAuthChecked: boolean;
@@ -61,6 +61,19 @@ const authSlice = createSlice({
       })
       .addCase(registerThunk.rejected, (state, action) => {
         state.error = action.error.message || 'register failed';
+        state.isAuthChecked = true;
+      })
+      .addCase(updateUserThunk.pending, (state) => {
+        state.error = null;
+        state.isAuthChecked = false;
+      })
+      .addCase(updateUserThunk.fulfilled, (state, action) => {
+        state.error = null;
+        state.user = action.payload;
+        state.isAuthChecked = true;
+      })
+      .addCase(updateUserThunk.rejected, (state, action) => {
+        state.error = action.error.message || 'update user failed';
         state.isAuthChecked = true;
       });
   }

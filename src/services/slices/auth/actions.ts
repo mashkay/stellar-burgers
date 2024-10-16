@@ -7,7 +7,8 @@ import {
   logoutApi,
   registerUserApi,
   TLoginData,
-  TRegisterData
+  TRegisterData,
+  updateUserApi
 } from '@api';
 
 export const checkUserAuthThunk = createAsyncThunk(
@@ -59,6 +60,14 @@ export const logoutThunk = createAsyncThunk(
       dispatch(setUser(null));
       dispatch(setError(null));
     }
+  }
+);
+
+export const updateUserThunk = createAsyncThunk(
+  'auth/updateUser',
+  async (data: Partial<TRegisterData>) => {
+    const response = await updateUserApi(data);
+    return response.user;
   }
 );
 

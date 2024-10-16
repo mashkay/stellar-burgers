@@ -1,4 +1,4 @@
-import { ConstructorPage, Feed, Login, NotFound404 } from '@pages';
+import { ConstructorPage, Feed, Login, NotFound404, Profile } from '@pages';
 import '../../index.css';
 import styles from './app.module.css';
 
@@ -7,7 +7,7 @@ import { useEffect } from 'react';
 import { useAppDispatch } from '@store';
 import { auth } from '@slices';
 import { Route, Routes, useLocation } from 'react-router-dom';
-import { OnlyUnAuth } from '../protected-route';
+import { OnlyAuth, OnlyUnAuth } from '../protected-route';
 
 const App = () => {
   const location = useLocation();
@@ -22,6 +22,7 @@ const App = () => {
         <Route path='/' element={<ConstructorPage />} />
         <Route path='/feed' element={<Feed />} />
         <Route path='/login' element={<OnlyUnAuth component={<Login />} />} />
+        <Route path='/profile' element={<OnlyAuth component={<Profile />} />} />
         <Route path='*' element={<NotFound404 />} />
       </Routes>
     </div>
