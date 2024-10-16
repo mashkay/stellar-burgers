@@ -12,7 +12,7 @@ import {
 
 export const checkUserAuthThunk = createAsyncThunk(
   'auth/checkAuth',
-  async (_, { dispatch }) => {
+  async () => {
     const accessToken = getCookie('accessToken');
     const refreshToken = localStorage.getItem('refreshToken');
     if (!accessToken && !refreshToken) {
