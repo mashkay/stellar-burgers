@@ -1,6 +1,12 @@
-import { createSlice, nanoid, PayloadAction } from '@reduxjs/toolkit';
+import {
+  createSelector,
+  createSlice,
+  nanoid,
+  PayloadAction
+} from '@reduxjs/toolkit';
 import { TConstructorIngredient, TIngredient } from '@utils-types';
 import { logoutThunk } from '../auth';
+import { placeOrderThunk } from '../order';
 
 export interface BurgerConstructorState {
   bun: TIngredient | null;
@@ -17,6 +23,7 @@ const burgerConstructorSlice = createSlice({
   initialState,
   selectors: {
     selectBun: (state: BurgerConstructorState) => state.bun,
+    selectIngredients: (state: BurgerConstructorState) => state.ingredients,
     selectItems: (state: BurgerConstructorState) => state
   },
   reducers: {
@@ -47,16 +54,30 @@ const burgerConstructorSlice = createSlice({
       .addCase(logoutThunk.fulfilled, (state) => {
         state.bun = initialState.bun;
         state.ingredients = initialState.ingredients;
+      })
+      // сброс конструктора после успешного заказа
+      .addCase(placeOrderThunk.fulfilled, (state) => {
+        state.bun = initialState.bun;
+        state.ingredients = initialState.ingredients;
       });
   }
 });
 
 export default burgerConstructorSlice;
 
-export const { selectBun, selectItems } = burgerConstructorSlice.selectors;
+export const { selectBun, selectItems, selectIngredients } =
+  burgerConstructorSlice.selectors;
 export const {
   setBun,
   addIngredient,
   removeOneIngredient,
   swapItemsPositions
 } = burgerConstructorSlice.actions;
+
+export const selectIngredientsForOrder = createSelector(
+  [selectBun, selectIngredients],
+  (bun, ingredients) =>
+    bun
+      ? [bun._id, ...ingredients.map((item) => item._id), bun._id]
+      : ingredients.map((item) => item._id)
+);

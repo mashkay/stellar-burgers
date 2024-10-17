@@ -74,3 +74,19 @@
   width: 100%;
   max-width: 536px;
 }
+
+.noBunsError {
+  animation: flash 0.35s;
+}
+
+@keyframes flash {
+  0% {
+    filter: brightness(1);
+  }
+  50% {
+    filter: brightness(1.4);
+  }
+  100% {
+    filter: brightness(1);
+  }
+}
