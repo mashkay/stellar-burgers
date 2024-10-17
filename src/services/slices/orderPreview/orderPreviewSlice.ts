@@ -5,13 +5,13 @@ import { getOrderByNumberThunk } from './actions';
 export interface OrderPreviewState {
   order: TOrder | null;
   isLoading: boolean;
-  orderNumberInProgress: number | null;
+  pendingOrderNumber: number | null;
 }
 
 const initialState: OrderPreviewState = {
   order: null,
   isLoading: false,
-  orderNumberInProgress: null
+  pendingOrderNumber: null
 };
 
 const orderPreviewSlice = createSlice({
@@ -21,10 +21,10 @@ const orderPreviewSlice = createSlice({
   selectors: {
     selectOrder: (state: OrderPreviewState) => state.order,
     selectIsLoading: (state: OrderPreviewState) => state.isLoading,
-    selectOrderIsFetched: createSelector(
+    selectIsOrderFetched: createSelector(
       [
         (_: OrderPreviewState, orderNumber: number) => orderNumber,
-        (state: OrderPreviewState) => state.orderNumberInProgress,
+        (state: OrderPreviewState) => state.pendingOrderNumber,
         (state: OrderPreviewState) => state.isLoading
       ],
       (orderNumber, lastFetched, isLoading) =>
@@ -35,7 +35,7 @@ const orderPreviewSlice = createSlice({
     builder
       .addCase(getOrderByNumberThunk.pending, (state, arg) => {
         state.isLoading = true;
-        state.orderNumberInProgress = arg.meta.arg;
+        state.pendingOrderNumber = arg.meta.arg;
       })
       .addCase(getOrderByNumberThunk.fulfilled, (state, action) => {
         state.isLoading = false;
@@ -45,7 +45,7 @@ const orderPreviewSlice = createSlice({
 });
 
 export const {} = orderPreviewSlice.actions;
-export const { selectIsLoading, selectOrder, selectOrderIsFetched } =
+export const { selectIsLoading, selectOrder, selectIsOrderFetched } =
   orderPreviewSlice.selectors;
 
 export default orderPreviewSlice;

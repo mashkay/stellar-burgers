@@ -23,7 +23,7 @@ export const OrderInfo: FC = () => {
   );
   // была ли попытка загрузить данные заказа c номером orderNumber с сервера
   const orderIsFetched = useAppSelector((state) =>
-    orderPreview.selectOrderIsFetched(state, orderNumber)
+    orderPreview.selectIsOrderFetched(state, orderNumber)
   );
 
   const ingredients: TIngredient[] = useAppSelector(
