@@ -10,7 +10,7 @@ export const IngredientDetails: FC = () => {
   /** TODO: взять переменную из стора */
   const { id } = useParams<{ id: string }>();
   if (!id) {
-    return <Preloader />;
+    return <NotFound404 />;
   }
 
   const isLoaded = useAppSelector(ingredients.selectIsLoaded);
@@ -18,13 +18,12 @@ export const IngredientDetails: FC = () => {
     ingredients.selectIngredientById(state, id)
   );
 
-  if (!isLoaded) {
-    return <Preloader />;
+  if (ingredientData) {
+    return <IngredientDetailsUI ingredientData={ingredientData} />;
   }
 
   if (isLoaded && !ingredientData) {
     return <NotFound404 />;
   }
-
-  return <IngredientDetailsUI ingredientData={ingredientData!} />;
+  return <Preloader />;
 };

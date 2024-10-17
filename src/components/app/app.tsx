@@ -14,7 +14,7 @@ import styles from './app.module.css';
 
 import { AppHeader, IngredientDetails, Modal, OrderInfo } from '@components';
 import { useEffect } from 'react';
-import { useAppDispatch, useAppSelector } from '@store';
+import { useAppDispatch } from '@store';
 import { auth, ingredients } from '@slices';
 import { Route, Routes, useLocation, useNavigate } from 'react-router-dom';
 import { OnlyAuth, OnlyUnAuth } from '../protected-route';
@@ -23,6 +23,7 @@ const App = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
+
   useEffect(() => {
     dispatch(auth.checkUserAuthThunk());
   }, []);
@@ -59,6 +60,7 @@ const App = () => {
         />
         <Route path='/ingredients/:id' element={<IngredientDetails />} />
         <Route path='/feed/:id' element={<OrderInfo />} />
+        <Route path='/profile/orders/:id' element={<OrderInfo />} />
         <Route path='*' element={<NotFound404 />} />
       </Routes>
       {location.state?.background && (
