@@ -5,6 +5,7 @@ import burgerConstructorSlice from './slices/burgerConstructor/burgerConstructor
 import orderSlice from './slices/order/orderSlice';
 import feedSlice from './slices/feed/feedSlice';
 import profileFeedSlice from './slices/profileFeed/profileFeedSlice';
+import orderPreview from './slices/orderPreview/orderPreviewSlice';
 
 import {
   TypedUseSelectorHook,
@@ -18,7 +19,8 @@ const rootReducer = combineSlices(
   burgerConstructorSlice,
   orderSlice,
   feedSlice,
-  profileFeedSlice
+  profileFeedSlice,
+  orderPreview
 ); // Заменить на импорт настоящего редьюсера
 
 const store = configureStore({
