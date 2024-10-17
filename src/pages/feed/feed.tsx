@@ -24,7 +24,7 @@ export const Feed: FC = () => {
   return (
     <FeedUI
       orders={orders}
-      getFeedsIsBlocked={isLoading}
+      feedRefreshsIsBlocked={isLoading}
       handleGetFeeds={() => {
         if (isLoading) {
           return;
