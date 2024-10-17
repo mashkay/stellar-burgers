@@ -20,4 +20,5 @@ type TOrderInfo = {
   updatedAt: string;
   number: number;
   ingredients: string[];
+  isMarked?: boolean;
 };
