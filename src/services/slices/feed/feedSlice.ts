@@ -1,4 +1,4 @@
-import { createSlice } from '@reduxjs/toolkit';
+import { createSelector, createSlice } from '@reduxjs/toolkit';
 import { TOrder } from '@utils-types';
 import { fetchFeedsThunk } from './actions';
 
@@ -23,7 +23,23 @@ const feedSlice = createSlice({
   selectors: {
     selectOrders: (state: FeedState) => state.orders,
     selectTotal: (state: FeedState) => state.total,
-    selectTotalToday: (state: FeedState) => state.totalToday
+    selectTotalToday: (state: FeedState) => state.totalToday,
+    selectOrdersDone: createSelector(
+      (state: FeedState) => state.orders,
+      (orders) =>
+        orders
+          .filter((order) => order.status === 'done')
+          .map((item) => item.number)
+          .slice(0, 20)
+    ),
+    selectOrdersPending: createSelector(
+      (state: FeedState) => state.orders,
+      (orders) =>
+        orders
+          .filter((order) => order.status === 'pending')
+          .map((item) => item.number)
+          .slice(0, 20)
+    )
   },
   extraReducers: (builder) => {
     builder
@@ -42,5 +58,10 @@ const feedSlice = createSlice({
 export default feedSlice;
 
 export const {} = feedSlice.actions;
-export const { selectOrders, selectTotal, selectTotalToday } =
-  feedSlice.selectors;
+export const {
+  selectOrders,
+  selectTotal,
+  selectTotalToday,
+  selectOrdersDone,
+  selectOrdersPending
+} = feedSlice.selectors;
