@@ -1,21 +1,41 @@
-import { FC, useMemo } from 'react';
+import { FC, useEffect, useMemo } from 'react';
 import { Preloader } from '../ui/preloader';
 import { OrderInfoUI } from '../ui/order-info';
 import { TIngredient } from '@utils-types';
+import { useParams } from 'react-router-dom';
+import { NotFound404 } from '@pages';
+import { useAppDispatch, useAppSelector } from '@store';
+import { ingredients as ingredientsStore, orderPreview } from '@slices';
+import { selectOrderByNumber } from '@selectors';
 
 export const OrderInfo: FC = () => {
   /** TODO: взять переменные orderData и ingredients из стора */
-  const orderData = {
-    createdAt: '',
-    ingredients: [],
-    _id: '',
-    status: '',
-    name: '',
-    updatedAt: 'string',
-    number: 0
-  };
 
-  const ingredients: TIngredient[] = [];
+  const { id } = useParams<{ id: string }>();
+  const orderNumber = Number(id);
+  if (!orderNumber || isNaN(orderNumber)) {
+    return <NotFound404 />;
+  }
+
+  // получаем данные заказа из стора по номеру orderNumber
+  const orderData = useAppSelector((state) =>
+    selectOrderByNumber(state, orderNumber)
+  );
+  // была ли попытка загрузить данные заказа c номером orderNumber с сервера
+  const orderIsFetched = useAppSelector((state) =>
+    orderPreview.selectOrderIsFetched(state, orderNumber)
+  );
+
+  const ingredients: TIngredient[] = useAppSelector(
+    ingredientsStore.selectIngredients
+  );
+  const dispatch = useAppDispatch();
+
+  useEffect(() => {
+    if (orderData === null) {
+      dispatch(orderPreview.getOrderByNumberThunk(orderNumber));
+    }
+  }, []);
 
   /* Готовим данные для отображения */
   const orderInfo = useMemo(() => {
@@ -59,9 +79,13 @@ export const OrderInfo: FC = () => {
     };
   }, [orderData, ingredients]);
 
-  if (!orderInfo) {
-    return <Preloader />;
+  if (orderInfo) {
+    return <OrderInfoUI orderInfo={orderInfo} />;
   }
 
-  return <OrderInfoUI orderInfo={orderInfo} />;
+  if (orderIsFetched && !orderInfo) {
+    return <NotFound404 />;
+  }
+
+  return <Preloader />;
 };
