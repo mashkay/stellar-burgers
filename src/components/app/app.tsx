@@ -60,7 +60,10 @@ const App = () => {
         />
         <Route path='/ingredients/:id' element={<IngredientDetails />} />
         <Route path='/feed/:id' element={<OrderInfo />} />
-        <Route path='/profile/orders/:id' element={<OrderInfo />} />
+        <Route
+          path='/profile/orders/:id'
+          element={<OnlyAuth component={<OrderInfo />} />}
+        />
         <Route path='*' element={<NotFound404 />} />
       </Routes>
       {location.state?.background && (
@@ -85,7 +88,7 @@ const App = () => {
             path='/profile/orders/:id'
             element={
               <Modal title='Детали заказа' onClose={onModalClose}>
-                <OrderInfo />
+                <OnlyAuth component={<OrderInfo />} />
               </Modal>
             }
           />
