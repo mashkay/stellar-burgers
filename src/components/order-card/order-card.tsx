@@ -4,6 +4,8 @@ import { useLocation } from 'react-router-dom';
 import { OrderCardProps } from './type';
 import { TIngredient } from '@utils-types';
 import { OrderCardUI } from '../ui/order-card';
+import { useAppSelector } from '@store';
+import { ingredients as ingredientsStore, order as orderStore } from '@slices';
 
 const maxIngredients = 6;
 
@@ -11,7 +13,11 @@ export const OrderCard: FC<OrderCardProps> = memo(({ order }) => {
   const location = useLocation();
 
   /** TODO: взять переменную из стора */
-  const ingredients: TIngredient[] = [];
+  const ingredients: TIngredient[] = useAppSelector(
+    ingredientsStore.selectIngredients
+  );
+
+  const lastOrder = useAppSelector(orderStore.selectLastOrder);
 
   const orderInfo = useMemo(() => {
     if (!ingredients.length) return null;
@@ -35,15 +41,18 @@ export const OrderCard: FC<OrderCardProps> = memo(({ order }) => {
         : 0;
 
     const date = new Date(order.createdAt);
+    // Отметка последнего заказа
+    const isMarked = (lastOrder && lastOrder._id === order._id) || false;
     return {
       ...order,
       ingredientsInfo,
       ingredientsToShow,
       remains,
       total,
-      date
+      date,
+      isMarked
     };
-  }, [order, ingredients]);
+  }, [order, ingredients, lastOrder]);
 
   if (!orderInfo) return null;
 
