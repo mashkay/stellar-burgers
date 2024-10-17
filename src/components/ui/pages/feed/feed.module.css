@@ -32,3 +32,8 @@
   overflow-x: hidden;
   width: 580px;
 }
+
+.button_isBlocked {
+  opacity: 0.3;
+  pointer-events: none;
+}

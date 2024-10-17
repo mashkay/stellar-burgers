@@ -7,13 +7,15 @@ export interface FeedState {
   total: number;
   totalToday: number;
   error: string | null;
+  isLoading: boolean;
 }
 
 const initialState: FeedState = {
   orders: [],
   total: 0,
   totalToday: 0,
-  error: null
+  error: null,
+  isLoading: false
 };
 
 const feedSlice = createSlice({
@@ -23,6 +25,7 @@ const feedSlice = createSlice({
   selectors: {
     selectOrders: (state: FeedState) => state.orders,
     selectTotal: (state: FeedState) => state.total,
+    selectIsLoading: (state: FeedState) => state.isLoading,
     selectTotalToday: (state: FeedState) => state.totalToday,
     selectOrdersDone: createSelector(
       (state: FeedState) => state.orders,
@@ -48,9 +51,15 @@ const feedSlice = createSlice({
         state.total = action.payload.total;
         state.totalToday = action.payload.totalToday;
         state.error = null;
+        state.isLoading = false;
+      })
+      .addCase(fetchFeedsThunk.pending, (state) => {
+        state.isLoading = true;
+        state.error = null;
       })
       .addCase(fetchFeedsThunk.rejected, (state, action) => {
         state.error = action.error.message || 'Failed to fetch feed data';
+        state.isLoading = false;
       });
   }
 });
@@ -62,6 +71,7 @@ export const {
   selectOrders,
   selectTotal,
   selectTotalToday,
+  selectIsLoading,
   selectOrdersDone,
   selectOrdersPending
 } = feedSlice.selectors;

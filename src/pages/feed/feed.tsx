@@ -9,6 +9,7 @@ export const Feed: FC = () => {
   /** TODO: взять переменную из стора */
 
   const dispatch = useAppDispatch();
+  const isLoading = useAppSelector(feed.selectIsLoading);
 
   useEffect(() => {
     dispatch(feed.fetchFeedsThunk());
@@ -23,7 +24,11 @@ export const Feed: FC = () => {
   return (
     <FeedUI
       orders={orders}
+      getFeedsIsBlocked={isLoading}
       handleGetFeeds={() => {
+        if (isLoading) {
+          return;
+        }
         dispatch(feed.fetchFeedsThunk());
       }}
     />
