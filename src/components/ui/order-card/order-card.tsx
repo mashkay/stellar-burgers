@@ -9,6 +9,7 @@ import styles from './order-card.module.css';
 
 import { OrderCardUIProps } from './type';
 import { OrderStatus } from '@components';
+import { clsx } from 'clsx';
 
 export const OrderCardUI: FC<OrderCardUIProps> = memo(
   ({ orderInfo, maxIngredients, locationState }) => (
@@ -16,7 +17,9 @@ export const OrderCardUI: FC<OrderCardUIProps> = memo(
       to={orderInfo.number.toString()}
       relative='path'
       state={locationState}
-      className={`p-6 mb-4 mr-2 ${styles.order}`}
+      className={clsx('p-6 mb-4 mr-2', styles.order, {
+        [styles.order_marked]: orderInfo.isMarked
+      })}
     >
       <div className={styles.order_info}>
         <span className={`text text_type_digits-default ${styles.number}`}>

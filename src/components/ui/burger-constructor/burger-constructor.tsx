@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import { FC } from 'react';
 import {
   Button,
   ConstructorElement,
@@ -9,6 +9,7 @@ import { BurgerConstructorUIProps } from './type';
 import { TConstructorIngredient } from '@utils-types';
 import { BurgerConstructorElement, Modal } from '@components';
 import { Preloader, OrderDetailsUI } from '@ui';
+import { clsx } from 'clsx';
 
 export const BurgerConstructorUI: FC<BurgerConstructorUIProps> = ({
   constructorItems,
@@ -16,7 +17,8 @@ export const BurgerConstructorUI: FC<BurgerConstructorUIProps> = ({
   price,
   orderModalData,
   onOrderClick,
-  closeOrderModal
+  closeOrderModal,
+  showErrors
 }) => (
   <section className={styles.burger_constructor}>
     {constructorItems.bun ? (
@@ -31,7 +33,12 @@ export const BurgerConstructorUI: FC<BurgerConstructorUIProps> = ({
       </div>
     ) : (
       <div
-        className={`${styles.noBuns} ${styles.noBunsTop} ml-8 mb-4 mr-5 text text_type_main-default`}
+        className={clsx(
+          styles.noBuns,
+          styles.noBunsTop,
+          showErrors && showErrors.bun && styles.noBunsError,
+          'ml-8 mb-4 mr-5 text text_type_main-default'
+        )}
       >
         Выберите булки
       </div>
@@ -68,7 +75,12 @@ export const BurgerConstructorUI: FC<BurgerConstructorUIProps> = ({
       </div>
     ) : (
       <div
-        className={`${styles.noBuns} ${styles.noBunsBottom} ml-8 mb-4 mr-5 text text_type_main-default`}
+        className={clsx(
+          styles.noBuns,
+          styles.noBunsBottom,
+          showErrors && showErrors.bun && styles.noBunsError,
+          'ml-8 mb-4 mr-5 text text_type_main-default'
+        )}
       >
         Выберите булки
       </div>
