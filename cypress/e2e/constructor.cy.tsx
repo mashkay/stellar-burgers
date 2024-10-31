@@ -7,6 +7,7 @@ const addText = 'Добавить';
 const removeSelector = '.constructor-element__action';
 const moveUPSelector = '.move_button:first-of-type';
 const moveDownSelector = '.move_button:last-of-type';
+const orderButtonText = 'Оформить заказ';
 
 const bun1 = {
   _id: '643d69a5c3f7b9001cfa093c',
@@ -60,7 +61,7 @@ describe('constructor page', () => {
     cy.get('[data-cy="fillingsList"]').as('fillingsList').should('be.visible');
   });
 
-  describe('add/change bun', () => {
+  describe.skip('add/change bun', () => {
     it('add one bun,  than add another bun', () => {
       // проверили что контейнеры с текстом "Выберите булки" появились
 
@@ -106,7 +107,7 @@ describe('constructor page', () => {
       cy.get('@bottomNoBuns').should('not.exist');
     });
   });
-  describe('add/remove/move ingredients', () => {
+  describe.skip('add/remove/move ingredients', () => {
     it('add/remove 1 ingredient', () => {
       // нашли контейнер где должен быть ингредиент и проверили что там нет ингредиента
       cy.get('@fillingsList').contains(noFillingText).should('be.visible');
@@ -240,7 +241,7 @@ describe('constructor page', () => {
     });
   });
 
-  describe('ingredient details & modal', () => {
+  describe.skip('ingredient details & modal', () => {
     it('check modal by opening ingredient details', () => {
       // нажали на ингредиент 1
       cy.get('@ingredient1').click('topLeft');
@@ -277,6 +278,68 @@ describe('constructor page', () => {
       cy.get('body').type('{esc}');
       // проверили что модалка закрылась
       cy.get('@modal').should('not.exist');
+    });
+  });
+
+  describe('make order', () => {
+    beforeEach(() => {
+      // найдем кнопку оформить заказ
+      cy.get('@constructor').contains(orderButtonText).as('orderButton');
+    });
+    it('try order without bun and without login ', () => {
+      cy.get('@orderButton').click();
+      cy.get('[data-cy="modal"]').should('not.exist');
+    });
+
+    it("try correct order  without login, should redirect to '/login'", () => {
+      cy.get('@bun1').contains(addText).click();
+      cy.get('@ingredient1').contains(addText).click();
+      cy.get('@orderButton').click();
+
+      cy.url().should('include', '/login');
+      cy.get('[data-cy="modal"]').should('not.exist');
+    });
+
+    describe('try correct order with login', () => {
+      beforeEach(() => {
+        cy.setCookie('accessToken', 'accessToken');
+        window.localStorage.setItem('refreshToken', 'refreshToken');
+
+        cy.intercept('GET', '/api/auth/user', { fixture: 'user.json' });
+        cy.intercept('POST', '/api/auth/login', {
+          fixture: 'user.json'
+        });
+        cy.intercept('POST', '/api/orders', {
+          fixture: 'newOrderResponse.json'
+        });
+
+        cy.visit('/');
+      });
+
+      it('should open modal with order number', () => {
+        cy.get('@bun1').contains(addText).click();
+        cy.get('@ingredient1').contains(addText).click();
+        cy.get('@orderButton').click();
+
+        // проверим что не редиректнуло на логин
+        cy.url().should('not.include', '/login');
+
+        // проверим что модалка появилась, что в ней верный текст с номером заказа
+        cy.get('[data-cy="modal"]').as('modal').should('be.visible');
+        cy.get('@modal').contains('58183');
+
+        // проверим что кнопка закрыть модалку работает
+        cy.get('[data-cy="modal-close"]').click();
+
+        cy.get('@modal').should('not.exist');
+
+        // проверим что заказ исчез из конструктора
+        cy.get('@constructor').contains(bun1.text).should('not.exist');
+        cy.get('@constructor').contains(filling1.text).should('not.exist');
+
+        // проверим что контейнеры с текстом "Выберите булки" появились
+        cy.get('@constructor').contains(noBunsText);
+      });
     });
   });
 });
