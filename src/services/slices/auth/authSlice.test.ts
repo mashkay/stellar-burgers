@@ -22,7 +22,7 @@ import { TUser } from '@utils-types';
 
 const { reducer } = authSlice;
 
-const authSliceInitialState: AuthState = {
+export const authSliceInitialState: AuthState = {
   isAuthChecked: false,
   user: null,
   errors: {
@@ -92,17 +92,17 @@ describe('authSlice', () => {
       { name: 'NonAuthState', state: stateWithCheckedAuth }
     ];
     describe('loginThunk cases', () => {
-      cases.forEach((item) => {
-        it(`${item.name} should handle loginThunk.pending`, () => {
-          const actual = reducer(item.state, {
+      cases.forEach(({ name, state }) => {
+        it(`${name} should handle loginThunk.pending`, () => {
+          const actual = reducer(state, {
             type: loginThunk.pending.type
           });
           expect(actual.errors.login).toEqual(null);
           expect(actual.isAuthChecked).toEqual(false);
         });
 
-        it(`${item.name} should handle loginThunk.fulfilled`, () => {
-          const actual = reducer(item.state, {
+        it(`${name} should handle loginThunk.fulfilled`, () => {
+          const actual = reducer(state, {
             type: loginThunk.fulfilled.type,
             payload: user
           });
@@ -111,9 +111,9 @@ describe('authSlice', () => {
           expect(actual.isAuthChecked).toEqual(true);
         });
 
-        it(`${item.name} should handle loginThunk.rejected`, () => {
+        it(`${name} should handle loginThunk.rejected`, () => {
           const message = 'Login FAIL MSG';
-          const actual = reducer(item.state, {
+          const actual = reducer(state, {
             type: loginThunk.rejected.type,
             error: { message }
           });
@@ -124,17 +124,17 @@ describe('authSlice', () => {
     });
 
     describe('registerThunk cases', () => {
-      cases.forEach((item) => {
-        it(`${item.name} should handle registerThunk.pending`, () => {
-          const actual = reducer(item.state, {
+      cases.forEach(({ name, state }) => {
+        it(`${name} should handle registerThunk.pending`, () => {
+          const actual = reducer(state, {
             type: registerThunk.pending.type
           });
           expect(actual.errors.register).toEqual(null);
           expect(actual.isAuthChecked).toEqual(false);
         });
 
-        it(`${item.name} should handle registerThunk.fulfilled`, () => {
-          const actual = reducer(item.state, {
+        it(`${name} should handle registerThunk.fulfilled`, () => {
+          const actual = reducer(state, {
             type: registerThunk.fulfilled.type,
             payload: user
           });
@@ -143,9 +143,9 @@ describe('authSlice', () => {
           expect(actual.isAuthChecked).toEqual(true);
         });
 
-        it(`${item.name} should handle registerThunk.rejected`, () => {
+        it(`${name} should handle registerThunk.rejected`, () => {
           const message = 'register FAIL MSG';
-          const actual = reducer(item.state, {
+          const actual = reducer(state, {
             type: registerThunk.rejected.type,
             error: { message }
           });
