@@ -61,7 +61,7 @@ describe('constructor page', () => {
     cy.get('[data-cy="fillingsList"]').as('fillingsList').should('be.visible');
   });
 
-  describe.skip('add/change bun', () => {
+  describe('add/change bun', () => {
     it('add one bun,  than add another bun', () => {
       // проверили что контейнеры с текстом "Выберите булки" появились
 
@@ -107,7 +107,7 @@ describe('constructor page', () => {
       cy.get('@bottomNoBuns').should('not.exist');
     });
   });
-  describe.skip('add/remove/move ingredients', () => {
+  describe('add/remove/move ingredients', () => {
     it('add/remove 1 ingredient', () => {
       // нашли контейнер где должен быть ингредиент и проверили что там нет ингредиента
       cy.get('@fillingsList').contains(noFillingText).should('be.visible');
@@ -241,7 +241,7 @@ describe('constructor page', () => {
     });
   });
 
-  describe.skip('ingredient details & modal', () => {
+  describe('ingredient details & modal', () => {
     it('check modal by opening ingredient details', () => {
       // нажали на ингредиент 1
       cy.get('@ingredient1').click('topLeft');

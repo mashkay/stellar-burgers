@@ -3,7 +3,8 @@
  * https://jestjs.io/docs/configuration
  */
 
-import type {Config} from 'jest';
+import type { Config } from 'jest';
+import path from 'path';
 
 const config: Config = {
   // All imported modules in your tests should be mocked automatically
@@ -25,7 +26,7 @@ const config: Config = {
   // collectCoverageFrom: undefined,
 
   // The directory where Jest should output its coverage files
-  coverageDirectory: "coverage",
+  coverageDirectory: 'coverage',
 
   // An array of regexp pattern strings used to skip coverage collection
   // coveragePathIgnorePatterns: [
@@ -33,7 +34,7 @@ const config: Config = {
   // ],
 
   // Indicates which provider should be used to instrument code for coverage
-  coverageProvider: "v8",
+  coverageProvider: 'v8',
 
   // A list of reporter names that Jest uses when writing coverage reports
   // coverageReporters: [
@@ -90,7 +91,17 @@ const config: Config = {
   // ],
 
   // A map from regular expressions to module names or to arrays of module names that allow to stub out resources with a single module
-  // moduleNameMapper: {},
+  moduleNameMapper: {
+    '^@pages(.*)$': path.resolve(__dirname, './src/pages$1'),
+    '^@components(.*)$': path.resolve(__dirname, './src/components$1'),
+    '^@ui(.*)$': path.resolve(__dirname, './src/components/ui$1'),
+    '^@ui-pages(.*)$': path.resolve(__dirname, './src/components/ui/pages$1'),
+    '^@utils-types(.*)$': path.resolve(__dirname, './src/utils/types$1'),
+    '^@api$': path.resolve(__dirname, './src/utils/burger-api.ts'),
+    '^@slices(.*)$': path.resolve(__dirname, './src/services/slices$1'),
+    '^@selectors(.*)$': path.resolve(__dirname, './src/services/selectors$1'),
+    '^@store(.*)$': path.resolve(__dirname, './src/services/store$1')
+  }
 
   // An array of regexp pattern strings, matched against all module paths before considered 'visible' to the module loader
   // modulePathIgnorePatterns: [],
