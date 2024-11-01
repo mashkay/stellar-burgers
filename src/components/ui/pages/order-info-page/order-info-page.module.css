@@ -1,0 +1,13 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  max-width: 1240px;
+  width: 100%;
+  height: 100%;
+  margin: 120px auto auto;
+  align-items: center;
+}
+
+.container h4:first-of-type {
+  text-align: center;
+}

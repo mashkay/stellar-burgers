@@ -9,6 +9,7 @@ import {
   Register,
   ResetPassword
 } from '@pages';
+import { IngredientPageUI, OrderInfoPageUI } from '@ui-pages';
 import '../../index.css';
 import styles from './app.module.css';
 
@@ -58,11 +59,11 @@ const App = () => {
           path='/profile/orders'
           element={<OnlyAuth component={<ProfileOrders />} />}
         />
-        <Route path='/ingredients/:id' element={<IngredientDetails />} />
-        <Route path='/feed/:id' element={<OrderInfo />} />
+        <Route path='/ingredients/:id' element={<IngredientPageUI />} />
+        <Route path='/feed/:id' element={<OrderInfoPageUI />} />
         <Route
           path='/profile/orders/:id'
-          element={<OnlyAuth component={<OrderInfo />} />}
+          element={<OnlyAuth component={<OrderInfoPageUI />} />}
         />
         <Route path='*' element={<NotFound404 />} />
       </Routes>
