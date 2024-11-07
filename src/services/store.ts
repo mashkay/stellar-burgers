@@ -13,7 +13,7 @@ import {
   useSelector as selectorHook
 } from 'react-redux';
 
-export const rootReducer = combineSlices(
+const rootReducer = combineSlices(
   authSlice,
   ingredientsSlice,
   burgerConstructorSlice,
